@@ -6,12 +6,17 @@
     <string name="action_settings">Settings</string>
 	<string name="submit">Submit</string>
 	<string name="partner">Partner Selection</string>
+	<string name="opponent">Opponent Selection</string>
 	<string name="change_name">Change Name</string>
+	<string name="change_partner">Change Partner</string>
 	
 	<!-- temp data to use before we actually create the db -->
 	<string-array name="partners">
 	    <item>Nicole</item>
 	    <item>Julie</item>
 	    <item>Danny</item>
+	</string-array>
+	<string-array name="opponents">
+	    <item>Julie/Danny</item>
 	</string-array>
 </resources>

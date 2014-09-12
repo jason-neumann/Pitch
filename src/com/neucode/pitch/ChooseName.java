@@ -49,12 +49,7 @@ public class ChooseName extends Activity {
 	public void saveName(View view) {
 		SharedPreferences prefs = this.getSharedPreferences("pitchPreferences", Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = prefs.edit();
-		
-		
-		
-		//choose partner will list available partners from a remote sql db (fake db for now). Selecting a partner goes to choose opponents
-		//choose opponents will then pull from a remote sql db to find available teams and display them in a list
-		//when the user chooses an opponent it will take them to another activity where we can start working on displaying the cards
+
 		EditText name = (EditText) findViewById(R.id.user_name);
 		
 		editor.putString("userName", name.getText().toString());

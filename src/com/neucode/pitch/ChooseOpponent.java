@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 package com.neucode.pitch;
 
 import android.app.Activity;
@@ -11,52 +14,56 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class ChoosePartner extends Activity {
+/**
+ * @author neubie
+ *
+ */
+public class ChooseOpponent extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_choose_partner);
+		setContentView(R.layout.activity_choose_opponent);
 
 		//get the name for the welcome message
 	    SharedPreferences prefs = this.getSharedPreferences("pitchPreferences", Context.MODE_PRIVATE);
-	    String msg = "Welcome " + prefs.getString("userName","") + ". Select a partner.";
+	    String msg = "Alright " + prefs.getString("userName","") + " and " + prefs.getString("partner", "") + ", who would you like to play against?";
 	    
 	    // Create the text view
 	    TextView welcome = (TextView) findViewById(R.id.welcome);
 	    welcome.setText(msg);
-	    final String[] opponents = getResources().getStringArray(R.array.partners);
-	    final ChoosePartner activityReference = this;
 	    
 	    //add people to list view
-	    ListView partnersList = (ListView) findViewById(R.id.availablePartners);
+	    ListView opponentList = (ListView) findViewById(R.id.availableOpponents);
 	    ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 	    		this,
 	    		android.R.layout.simple_list_item_1,
 	    		android.R.id.text1,
-	    		opponents
+	    		getResources().getStringArray(R.array.opponents)
 	    );
-	    partnersList.setAdapter(adapter);
+	    opponentList.setAdapter(adapter);
 	    
-	    partnersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+	    opponentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 	    	 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            	//I'm assuming the id passed in will be the id from the db, too lazy to create a hashmap to test it
-            	
-            	//@todo send data to remote db, wait for other player to confirm partnership
+            	//@todo send data to remote db, wait for other players to confirm game
             	
             	//save the data in preferences
-            	SharedPreferences prefs = getBaseContext().getSharedPreferences("pitchPreferences", Context.MODE_PRIVATE);
-            	SharedPreferences.Editor editor = prefs.edit();
-            	editor.putString("partner", opponents[(int) id]);
-            	editor.commit();
+//            	SharedPreferences prefs = getBaseContext().getSharedPreferences("pitchPreferences", Context.MODE_PRIVATE);
+//            	SharedPreferences.Editor editor = prefs.edit();
+//            	editor.putLong("opponent", id);
+//            	editor.commit();
             	
-            	Intent chooseOpponent = new Intent(activityReference, ChooseOpponent.class);
-            	startActivity(chooseOpponent);
+
+            	//create the choose opponent activity
+            	//create an intent and call startActivity() to go to choose opponent
+            	
+            	
+//				Log.i("id","position " + position + " id " +id);
 			}
 		});
 	}
-//
+
 //	@Override
 //	public boolean onCreateOptionsMenu(Menu menu) {
 //		// Inflate the menu; this adds items to the action bar if it is present.
@@ -76,15 +83,13 @@ public class ChoosePartner extends Activity {
 //		return super.onOptionsItemSelected(item);
 //	}
 	
-	public void resetName(View view) {
+	public void chooseNewPartner(View view) {
 		SharedPreferences prefs = this.getSharedPreferences("pitchPreferences", Context.MODE_PRIVATE);
 	    SharedPreferences.Editor editor = prefs.edit();
-	    editor.remove("userName");
+	    editor.remove("partner");
 	    editor.commit();
 
-	    Intent chooseName = new Intent(this,ChooseName.class);
-	    startActivity(chooseName);
+	    Intent choosePartner = new Intent(this,ChoosePartner.class);
+	    startActivity(choosePartner);
 	}
 }
-
-

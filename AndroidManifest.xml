@@ -27,6 +27,10 @@
             android:label="@string/partner"
             android:parentActivityName=".ChooseName">
         </activity>
+        <activity
+            android:name=".ChooseOpponent"
+            android:label="@string/opponent"
+            android:parentActivityName=".ChoosePartner" />
     </application>
 
 </manifest>
