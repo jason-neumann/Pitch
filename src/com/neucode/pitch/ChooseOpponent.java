@@ -55,8 +55,10 @@ public class ChooseOpponent extends Activity {
 //            	editor.commit();
             	
 
-            	//create the choose opponent activity
-            	//create an intent and call startActivity() to go to choose opponent
+            	//create the table activity
+            	//create an intent and call startActivity() to go to table
+            	
+            	//figure out how to add images to an activity and move them around
             	
             	
 //				Log.i("id","position " + position + " id " +id);
