@@ -28,7 +28,7 @@ public class ChooseOpponent extends Activity {
 	    SharedPreferences prefs = this.getSharedPreferences("pitchPreferences", Context.MODE_PRIVATE);
 	    String msg = "Alright " + prefs.getString("userName","") + " and " + prefs.getString("partner", "") + ", who would you like to play against?";
 	    
-	    // Create the text view
+	    //set the text view's text
 	    TextView welcome = (TextView) findViewById(R.id.welcome);
 	    welcome.setText(msg);
 	    
@@ -49,10 +49,10 @@ public class ChooseOpponent extends Activity {
             	//@todo send data to remote db, wait for other players to confirm game
             	
             	//save the data in preferences
-//            	SharedPreferences prefs = getBaseContext().getSharedPreferences("pitchPreferences", Context.MODE_PRIVATE);
-//            	SharedPreferences.Editor editor = prefs.edit();
-//            	editor.putLong("opponent", id);
-//            	editor.commit();
+            	SharedPreferences prefs = getBaseContext().getSharedPreferences("pitchPreferences", Context.MODE_PRIVATE);
+            	SharedPreferences.Editor editor = prefs.edit();
+            	editor.putLong("opponent", id);
+            	editor.commit();
             	
 
             	//create the table activity
