@@ -84,6 +84,7 @@ public class ChoosePartner extends Activity {
 
 	    Intent chooseName = new Intent(this,ChooseName.class);
 	    startActivity(chooseName);
+	    finish();
 	}
 }
 

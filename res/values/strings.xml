@@ -9,7 +9,8 @@
 	<string name="opponent">Opponent Selection</string>
 	<string name="change_name">Change Name</string>
 	<string name="change_partner">Change Partner</string>
-	<string name="table">Table string</string>
+	<string name="table">Table</string>
+	<string name="card">Back of a card</string>
 	
 	<!-- temp data to use before we actually create the db -->
 	<string-array name="partners">

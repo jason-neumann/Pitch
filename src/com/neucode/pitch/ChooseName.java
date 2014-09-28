@@ -24,7 +24,9 @@ public class ChooseName extends Activity {
 		if(prefs.getString("userName", "") != "") {
 			//Go to choose table
 			Intent intent = new Intent(this, ChoosePartner.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
+			finish();
 		}
 	}
 

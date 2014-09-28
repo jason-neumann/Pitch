@@ -41,6 +41,7 @@ public class ChooseOpponent extends Activity {
 	    		getResources().getStringArray(R.array.opponents)
 	    );
 	    opponentList.setAdapter(adapter);
+	    final Activity opponentReference = this;
 	    
 	    opponentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 	    	 
@@ -54,14 +55,9 @@ public class ChooseOpponent extends Activity {
             	editor.putLong("opponent", id);
             	editor.commit();
             	
-
             	//create the table activity
-            	//create an intent and call startActivity() to go to table
-            	
-            	//figure out how to add images to an activity and move them around
-            	
-            	
-//				Log.i("id","position " + position + " id " +id);
+            	Intent table = new Intent(opponentReference,Table.class);
+            	startActivity(table);
 			}
 		});
 	}
@@ -93,5 +89,6 @@ public class ChooseOpponent extends Activity {
 
 	    Intent choosePartner = new Intent(this,ChoosePartner.class);
 	    startActivity(choosePartner);
+	    finish();
 	}
 }
