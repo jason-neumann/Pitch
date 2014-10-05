@@ -13,9 +13,7 @@ import android.view.WindowManager;
 
 public class MainPanel extends SurfaceView implements
 SurfaceHolder.Callback{
-	protected Bitmap cardback1;
-	protected Bitmap cardback2;
-	protected Point cardSpot;
+	protected Card[] deck; 
 	
 	protected Point screenSize;
 	
@@ -32,13 +30,21 @@ SurfaceHolder.Callback{
 		screenSize = new Point();
 		display.getSize(screenSize);
 		
+		deck = new Card[52];
 		Bitmap originalCard = BitmapFactory.decodeResource(getResources(),R.drawable.card_back);
-		cardback1 = Bitmap.createScaledBitmap(originalCard, (int)(screenSize.x * .1), (int)(screenSize.x * .13), true);
-		cardback2 = Bitmap.createScaledBitmap(originalCard, (int)(screenSize.x * .1), (int)(screenSize.x * .13), true);
 		
-		cardSpot = new Point();
-		cardSpot.x = (int) (screenSize.x * .1);
-		cardSpot.y = (int) (screenSize.y * .1);
+		for(int i = 0; i < 52; i ++) {
+			deck[i] = new Card(
+					Bitmap.createScaledBitmap(
+							originalCard,
+							(int)(screenSize.x * .1),
+							(int)(screenSize.x * .13),
+							true),
+					new Point(
+							(int) (screenSize.x * .1),
+							(int) (screenSize.y * .1))
+			);
+		}
 		
 		// create the game loop thread
 		thread = new MainThread(getHolder(), this);
@@ -46,12 +52,6 @@ SurfaceHolder.Callback{
 		// make the GamePanel focusable so it can handle events
 		setFocusable(true);
 	}
-	
-	public void setCardSpot(int x,int y) {
-		cardSpot.x = x;
-		cardSpot.y = y;
-	}
-
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
@@ -78,11 +78,9 @@ SurfaceHolder.Callback{
 	
 	public void render(Canvas canvas) {
 		canvas.drawColor(Color.WHITE);
-		canvas.drawBitmap(cardback1,
-				cardSpot.x,
-				cardSpot.y,
-				null);
-		canvas.drawBitmap(cardback2, (int)(screenSize.x * .1), (int)(screenSize.y * .1), null);
+		for(int i = 0; i < 52; i++) {
+			deck[i].draw(canvas);
+		}
 	}
 
 	/**
@@ -91,10 +89,9 @@ SurfaceHolder.Callback{
 	 * engine's update method.
 	 */
 	public void update() {
-		cardSpot.y += 7;
 		
-		if(cardSpot.y > (getHeight() * .8)) {
-			thread.setRunning(false);
+		for(int i = 0; i < 52; i++) {
+			deck[0].update();
 		}
 	}
 

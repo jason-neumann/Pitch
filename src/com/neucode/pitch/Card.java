@@ -16,4 +16,8 @@ public class Card {
 	public void draw(Canvas canvas) {
 		canvas.drawBitmap(image, location.x - (image.getWidth() / 2), location.y - (image.getHeight() / 2), null);
 	}
+	
+	public void update() {
+		location.y += 7;
+	}
 }
