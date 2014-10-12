@@ -18,6 +18,6 @@ public class Card {
 	}
 	
 	public void update() {
-		location.y += 7;
+		location.y += 5;
 	}
 }
