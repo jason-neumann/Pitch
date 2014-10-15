@@ -15,9 +15,14 @@ import android.view.WindowManager;
 
 public class MainPanel extends SurfaceView implements
 SurfaceHolder.Callback{
-	protected static final int DECK_SIZE = 52;
 	
-	protected Card[] deck; 
+	protected Bitmap cardBackVertical;
+	
+	protected Bitmap cardBackHorizontal;
+	
+	protected int cardSpacingTopBottom;
+	
+	protected int cardSpacingLeftRight;
 	
 	protected Point screenSize;
 	
@@ -36,22 +41,18 @@ SurfaceHolder.Callback{
 		screenSize = new Point();
 		display.getSize(screenSize);
 		
-		dealer = new Dealer();
+		dealer = new Dealer(getResources());
 		
 		deck = new Card[DECK_SIZE];
-		Bitmap originalCard = BitmapFactory.decodeResource(getResources(),R.drawable.card_back);
-		
+//		Matrix matrix = new Matrix();
+//		matrix.postRotate(90);
+//		rotatedCard = Bitmap.createBitmap(originalCard, 0, 0, originalCard.getWidth(), originalCard.getHeight(), matrix, true);
+
+		cardBackVertical = BitmapFactory.decodeResource(getResources(),R.drawable.card_back_vertical);
+		cardBackHorizontal = BitmapFactory.decodeResource(getResources(),R.drawable.card_back_horizontal);
+
 		for(int i = 0; i < DECK_SIZE; i ++) {
-			deck[i] = new Card(
-					Bitmap.createScaledBitmap(
-							originalCard,
-							(int)(screenSize.x * .2),
-							(int)(screenSize.x * .26),
-							true),
-					new Point(
-							(int) (screenSize.x * .2),
-							(int) (screenSize.y * .1))
-			);
+			deck[i] = new Card(cardBackVertical, new Point(0, 0), dealer);
 		}
 
 		// create the game loop thread
@@ -63,6 +64,9 @@ SurfaceHolder.Callback{
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
+		cardSpacingTopBottom = (int)((.8 * getWidth() - 9 * cardBackVertical.getWidth()) / 9 );
+		cardSpacingLeftRight = (int)((.7 * getHeight() - 9 * cardBackHorizontal.getHeight()) / 9 );
+		
 		// at this point the surface is created and
 		// we can safely start the game loop
 		thread.setRunning(true);
@@ -87,29 +91,28 @@ SurfaceHolder.Callback{
 	public void render(Canvas canvas) {
 		canvas.drawColor(Color.rgb(39, 119, 20));
 
-		Matrix matrix = new Matrix();
-		matrix.postRotate(90);
 		for(int i = 0; i < 36; i++) {
 			switch(i/9) {
-			case 0:
-				deck[i].location.x = (int) ((getWidth() * .2) + (deck[i].image.getWidth() * i * .35));
-				deck[i].location.y = (int) (getHeight() * .8);
+			case 0: //users cards
+				dealer.chooseCard(deck[i]);
+				deck[i].location.x = (int) (getWidth() * .1 + (deck[i].image.getWidth() + cardSpacingTopBottom) * i);
+				deck[i].location.y = (int) (getHeight() - deck[i].image.getHeight());
 				break;
-			case 1:
-				deck[i].image = Bitmap.createBitmap(deck[i].image, 0, 0, deck[i].image.getWidth(), deck[i].image.getHeight(), matrix, true);
-
-				deck[i].location.x = (int) (getWidth() * .2);
-				deck[i].location.y = (int) ((getHeight() * .2) + (deck[i].image.getWidth() * (i - 9) * .35));
+			case 1: //left cards
+				deck[i].image = cardBackHorizontal;
+				deck[i].location.x = (int)(- deck[i].image.getWidth() / 2);
+				deck[i].location.y = (int) ((getHeight() * .15) + 
+						((deck[i].image.getHeight() + cardSpacingLeftRight) * (i - 9)));
 				break;
-			case 2:
-				deck[i].image = Bitmap.createBitmap(deck[i].image, 0, 0, deck[i].image.getWidth(), deck[i].image.getHeight(), matrix, true);
-				
-				deck[i].location.x = (int) (getWidth() * .8);
-				deck[i].location.y = (int) ((getHeight() * .2) + (deck[i].image.getWidth() * (i - 18) * .35));
+			case 2: //right cards
+				deck[i].image = cardBackHorizontal;
+				deck[i].location.x = getWidth() - (deck[i].image.getWidth() / 2);
+				deck[i].location.y = (int) ((getHeight() * .15) + 
+						((deck[i].image.getHeight() + cardSpacingLeftRight) * (i - 18)));
 				break;
-			case 3:
-				deck[i].location.x = (int) ((getWidth() * .2) + (deck[i].image.getWidth() * (i - 27) * .35));
-				deck[i].location.y = (int) (getHeight() * .2);
+			case 3: //top cards
+				deck[i].location.x = (int) (getWidth() * .1 + (deck[i].image.getWidth() + cardSpacingTopBottom) * (i - 27));
+				deck[i].location.y = (int)(- deck[i].image.getHeight() / 2);
 				break;
 			default:
 				break;
