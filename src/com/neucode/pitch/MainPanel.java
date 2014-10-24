@@ -6,54 +6,43 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.Point;
 import android.util.Log;
-import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.WindowManager;
 
 public class MainPanel extends SurfaceView implements
 SurfaceHolder.Callback{
 	
 	protected Bitmap cardBackVertical;
 	
-	protected Bitmap cardBackHorizontal;
+	public Bitmap cardBackHorizontal;
 	
-	protected int cardSpacingTopBottom;
+	public int cardSpacingTopBottom;
 	
-	protected int cardSpacingLeftRight;
-	
-	protected Point screenSize;
+	public int cardSpacingLeftRight;
 	
 	protected MainThread thread;
-	
-	protected int speed;
-	
-	protected Dealer dealer;
+
+	protected static Dealer dealer;
 	
 	public MainPanel(Context context) {
 		super(context);
 		
 		getHolder().addCallback(this);
+		Log.d("something", "wtfmate");
+		if(!(dealer instanceof Dealer)) {
+			Log.d("pitch", "first time2");
+		}
+		Log.d("pitch","after2");
 		
-		Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-		screenSize = new Point();
-		display.getSize(screenSize);
+		dealer = new Dealer(getResources(), this);
 		
-		dealer = new Dealer(getResources());
-		
-		deck = new Card[DECK_SIZE];
 //		Matrix matrix = new Matrix();
 //		matrix.postRotate(90);
 //		rotatedCard = Bitmap.createBitmap(originalCard, 0, 0, originalCard.getWidth(), originalCard.getHeight(), matrix, true);
 
 		cardBackVertical = BitmapFactory.decodeResource(getResources(),R.drawable.card_back_vertical);
 		cardBackHorizontal = BitmapFactory.decodeResource(getResources(),R.drawable.card_back_horizontal);
-
-		for(int i = 0; i < DECK_SIZE; i ++) {
-			deck[i] = new Card(cardBackVertical, new Point(0, 0), dealer);
-		}
 
 		// create the game loop thread
 		thread = new MainThread(getHolder(), this);
@@ -90,37 +79,7 @@ SurfaceHolder.Callback{
 	
 	public void render(Canvas canvas) {
 		canvas.drawColor(Color.rgb(39, 119, 20));
-
-		for(int i = 0; i < 36; i++) {
-			switch(i/9) {
-			case 0: //users cards
-				dealer.chooseCard(deck[i]);
-				deck[i].location.x = (int) (getWidth() * .1 + (deck[i].image.getWidth() + cardSpacingTopBottom) * i);
-				deck[i].location.y = (int) (getHeight() - deck[i].image.getHeight());
-				break;
-			case 1: //left cards
-				deck[i].image = cardBackHorizontal;
-				deck[i].location.x = (int)(- deck[i].image.getWidth() / 2);
-				deck[i].location.y = (int) ((getHeight() * .15) + 
-						((deck[i].image.getHeight() + cardSpacingLeftRight) * (i - 9)));
-				break;
-			case 2: //right cards
-				deck[i].image = cardBackHorizontal;
-				deck[i].location.x = getWidth() - (deck[i].image.getWidth() / 2);
-				deck[i].location.y = (int) ((getHeight() * .15) + 
-						((deck[i].image.getHeight() + cardSpacingLeftRight) * (i - 18)));
-				break;
-			case 3: //top cards
-				deck[i].location.x = (int) (getWidth() * .1 + (deck[i].image.getWidth() + cardSpacingTopBottom) * (i - 27));
-				deck[i].location.y = (int)(- deck[i].image.getHeight() / 2);
-				break;
-			default:
-				break;
-			}
-			
-			deck[i].draw(canvas);
-		}
-		Log.d("pitch", "done");
+		dealer.render(canvas);
 		this.thread.setRunning(false);
 	}
 
