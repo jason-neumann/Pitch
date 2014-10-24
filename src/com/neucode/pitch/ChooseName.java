@@ -5,10 +5,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
+
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class ChooseName extends Activity {
 
@@ -20,14 +29,16 @@ public class ChooseName extends Activity {
 	
 	protected void onResume() {
 		super.onResume();
-		SharedPreferences prefs = getSharedPreferences("pitchPreferences", Context.MODE_PRIVATE);
-		if(prefs.getString("userName", "") != "") {
-			//Go to choose table
-			Intent intent = new Intent(this, ChoosePartner.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
-			finish();
-		}
+		TextView temp = (TextView) findViewById(R.id.tmpThing);
+		temp.setText("hellooooo nurse!");
+//		SharedPreferences prefs = getSharedPreferences("pitchPreferences", Context.MODE_PRIVATE);
+//		if(prefs.getString("userName", "") != "") {
+//			//Go to choose table
+//			Intent intent = new Intent(this, ChoosePartner.class);
+//			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//			startActivity(intent);
+//			finish();
+//		}
 	}
 
 	@Override
@@ -49,14 +60,37 @@ public class ChooseName extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	public void saveName(View view) {
-		SharedPreferences prefs = this.getSharedPreferences("pitchPreferences", Context.MODE_PRIVATE);
-		SharedPreferences.Editor editor = prefs.edit();
-
-		EditText name = (EditText) findViewById(R.id.user_name);
+		try {
+			Log.d("pitch","trying");
+			Connection conn = DriverManager.getConnection(
+				"jdbc:mysql://pitch.cnqz7c8pzmnz.us-east-1.rds.amazonaws.com:3306/pitch",
+				"jason_neumann",
+				"laserbunny"
+			);
+			Log.d("pitch","connected?");
+			Statement stmt = conn.createStatement();
+			Log.d("pitch","stmt");
+			ResultSet rset = stmt.executeQuery("select userName from users");
+			Log.d("pitch","results?");
+			TextView temp = (TextView) findViewById(R.id.tmpThing);
+			Log.d("pitch",rset.toString());
+			while(rset.next()) {
+				temp.setText(rset.getString("userName"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			Log.d("pitch", e.getMessage());
+			Log.d("pitch", e.getSQLState());
+		}
 		
-		editor.putString("userName", name.getText().toString());
-		editor.commit();
-		Intent intent = new Intent(this, ChoosePartner.class);
-		startActivity(intent);
+//		SharedPreferences prefs = this.getSharedPreferences("pitchPreferences", Context.MODE_PRIVATE);
+//		SharedPreferences.Editor editor = prefs.edit();
+//
+//		EditText name = (EditText) findViewById(R.id.user_name);
+//		
+//		editor.putString("userName", name.getText().toString());
+//		editor.commit();
+//		Intent intent = new Intent(this, ChoosePartner.class);
+//		startActivity(intent);
 	}
 }

@@ -16,4 +16,8 @@
 	    android:layout_height="wrap_content"
 	    android:text="@string/submit"
 	    android:onClick="saveName" />
+	<TextView android:id="@+id/tmpThing"
+	    android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
 </LinearLayout>

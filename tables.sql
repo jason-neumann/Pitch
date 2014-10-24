@@ -1,0 +1,49 @@
+CREATE TABLE users (
+	userId INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    userName VARCHAR(255) NOT NULL,
+    password CHAR(32) NOT NULL
+);
+
+CREATE TABLE teams (
+	teamId INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    player1 INT UNSIGNED NOT NULL,
+    player2 INT UNSIGNED NULL
+);
+
+CREATE TABLE games (
+	gameId INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    team1 INT UNSIGNED NOT NULL,
+    team2 INT UNSIGNED NULL,
+    gameState ENUM('PARTNER_APPROVAL', 'OPPONENT_APPROVAL', 'BIDDING', 'DRAW_UP', 'PLAYING', 'OVER'),
+    orderOfPlay VARCHAR(40) NULL COMMENT 'json array, dealer then opponent player 1, team mate, opponent player 2. after each round pop elem 0 and push to end',
+    currentPlayerTurn INT UNSIGNED NULL,
+    team1Score TINYINT NOT NULL DEFAULT 0,
+    team2Score TINYINT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE rounds (
+	roundId INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    trumpSuit VARCHAR(10) NOT NULL DEFAULT '',
+    bid TINYINT UNSIGNED NOT NULL DEFAULT 0
+);
+
+CREATE TABLE cards (
+	cardId INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    suite ENUM('CLUBS','DIAMONDS','HEARTS','JOKER','SPADES'),
+    value INT UNSIGNED NOT NULL DEFAULT 0
+);
+
+CREATE TABLE books (
+	bookId INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    roundId INT UNSIGNED NOT NULL,
+    playerId INT UNSIGNED NOT NULL,
+    cardId INT UNSIGNED NULL,
+    winningTeam INT UNSIGNED NULL
+);
+
+CREATE TABLE playerRoundCardMap (
+	roundId INT UNSIGNED NOT NULL,
+    playerId INT UNSIGNED NULL,
+    cardId INT UNSIGNED NOT NULL
+    COMMENT "The cards in each players hand each round. playerId null means the card hasn't been dealt yet."
+);
