@@ -12,12 +12,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import org.twodee.android.utils.log.LogPrintStream;
+import org.twodee.android.utils.log.Priority;
 
 public class ChooseName extends Activity {
 
@@ -29,8 +31,11 @@ public class ChooseName extends Activity {
 	
 	protected void onResume() {
 		super.onResume();
-		TextView temp = (TextView) findViewById(R.id.tmpThing);
-		temp.setText("hellooooo nurse!");
+
+		//basic db call
+		new DbConnection().execute(new Object());
+		
+		
 //		SharedPreferences prefs = getSharedPreferences("pitchPreferences", Context.MODE_PRIVATE);
 //		if(prefs.getString("userName", "") != "") {
 //			//Go to choose table
@@ -60,37 +65,14 @@ public class ChooseName extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	public void saveName(View view) {
-		try {
-			Log.d("pitch","trying");
-			Connection conn = DriverManager.getConnection(
-				"jdbc:mysql://pitch.cnqz7c8pzmnz.us-east-1.rds.amazonaws.com:3306/pitch",
-				"jason_neumann",
-				"laserbunny"
-			);
-			Log.d("pitch","connected?");
-			Statement stmt = conn.createStatement();
-			Log.d("pitch","stmt");
-			ResultSet rset = stmt.executeQuery("select userName from users");
-			Log.d("pitch","results?");
-			TextView temp = (TextView) findViewById(R.id.tmpThing);
-			Log.d("pitch",rset.toString());
-			while(rset.next()) {
-				temp.setText(rset.getString("userName"));
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			Log.d("pitch", e.getMessage());
-			Log.d("pitch", e.getSQLState());
-		}
+		SharedPreferences prefs = this.getSharedPreferences("pitchPreferences", Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = prefs.edit();
+
+		EditText name = (EditText) findViewById(R.id.user_name);
 		
-//		SharedPreferences prefs = this.getSharedPreferences("pitchPreferences", Context.MODE_PRIVATE);
-//		SharedPreferences.Editor editor = prefs.edit();
-//
-//		EditText name = (EditText) findViewById(R.id.user_name);
-//		
-//		editor.putString("userName", name.getText().toString());
-//		editor.commit();
-//		Intent intent = new Intent(this, ChoosePartner.class);
-//		startActivity(intent);
+		editor.putString("userName", name.getText().toString());
+		editor.commit();
+		Intent intent = new Intent(this, ChoosePartner.class);
+		startActivity(intent);
 	}
 }
