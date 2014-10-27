@@ -12,14 +12,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
-import org.twodee.android.utils.log.LogPrintStream;
-import org.twodee.android.utils.log.Priority;
+//import org.twodee.android.utils.log.LogPrintStream;
+//import org.twodee.android.utils.log.Priority;
 
 public class ChooseName extends Activity {
 
@@ -32,18 +26,14 @@ public class ChooseName extends Activity {
 	protected void onResume() {
 		super.onResume();
 
-		//basic db call
-		new DbConnection().execute(new Object());
-		
-		
-//		SharedPreferences prefs = getSharedPreferences("pitchPreferences", Context.MODE_PRIVATE);
-//		if(prefs.getString("userName", "") != "") {
-//			//Go to choose table
-//			Intent intent = new Intent(this, ChoosePartner.class);
-//			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//			startActivity(intent);
-//			finish();
-//		}
+		SharedPreferences prefs = getSharedPreferences("pitchPreferences", Context.MODE_PRIVATE);
+		if(prefs.getString("userName", "") != "") {
+			//Go to choose table
+			Intent intent = new Intent(this, ChoosePartner.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			finish();
+		}
 	}
 
 	@Override
